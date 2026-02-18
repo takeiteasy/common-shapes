@@ -1,40 +1,16 @@
 # common-shapes
 
-A Common Lisp library for generating triangle meshes for 2D and 3D shapes.
+A Common Lisp library for generating triangle meshes for 2D and 3D shapes. 
 
 ## Features
 
-### 2D Shape Generators
-- **Rectangle** - Rectangular mesh with optional 3D output
-- **Circle** - Circular disk/ring mesh
-- **Polygon** - Regular polygon with configurable number of sides
-- **Ellipse** - Elliptical mesh with separate X and Y radii
-
-### 3D Shape Generators
-- **Cube** - Regular cube mesh
-- **Box** - Rectangular box with configurable dimensions
-- **Sphere** - UV sphere with latitude/longitude divisions
-- **Icosphere** - Subdividable icosahedron-based sphere
-- **Cylinder** - Cylindrical mesh with caps
-- **Cone** - Conical mesh with base cap
-- **Torus** - Torus/donut mesh
-- **Plane** - Flat rectangular plane
-- **Hemisphere** - Half-sphere dome
-- **Capsule** - Pill-shaped mesh (cylinder with hemispherical caps)
-
-### Platonic Solids
-- **Tetrahedron** - 4-sided regular polyhedron
-- **Octahedron** - 8-sided regular polyhedron
-- **Icosahedron** - 20-sided regular polyhedron
-- **Dodecahedron** - 12-sided regular polyhedron
-
-### Utility Functions
-- **Mesh Operations**
-  - `compute-normals` - Compute per-vertex normals
+- **2D** - Rectangle, circle, ellipse, and polygons
+- **3D** - Cube, box, sphere, icosphere, cylinder, cone, torus, plane, hemisphere, capulse, platonic (4/8/12/20 polyhedrons)
+- **Utilities** 
+  - `compute-normals` - Ccompute per-vertex normals
   - `compute-aabb` - Calculate axis-aligned bounding box
   - `merge-meshes` - Combine multiple meshes
   - `flip-winding` - Reverse triangle winding order
-  
 - **Transformations**
   - `transform-mesh` - Apply arbitrary 4x4 transformation matrix
   - `translate-mesh` - Move mesh in 3D space
@@ -43,8 +19,14 @@ A Common Lisp library for generating triangle meshes for 2D and 3D shapes.
   - `center-mesh` - Translate mesh to origin
   - `normalize-mesh` - Fit mesh in unit cube/square
 
+### TODOs
+
+- [ ] Constructive solid geometry
+
 ### Mesh Structure
+
 All generators return a `mesh` structure containing:
+
 - `vertices` - Flat array of vertex coordinates (2D: x y x y..., 3D: x y z x y z...)
 - `indices` - Triangle indices (i j k i j k...)
 - `normals` - Optional per-vertex normals
@@ -213,4 +195,4 @@ This runs tests for all shape generators, platonic solids, and utility functions
 
 ## License
 
-GPLv3
+[GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html)

@@ -18,8 +18,8 @@
 
 (asdf:defsystem #:common-shapes/test
   :description "Tests for common-shapes"
+  :author "George Watson <gigolo@hotmail.co.uk>"
+  :license "GPLv3"
   :depends-on (#:common-shapes #:fiveam)
-  :pathname "t/"
   :serial t
-  :components ((:file "package")
-               (:file "tests")))
+  :components ((:file "tests")))
