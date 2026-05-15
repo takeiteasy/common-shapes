@@ -59,4 +59,22 @@
    ;; CSG Operations
    #:csg-union
    #:csg-intersection
-   #:csg-difference))
+   #:csg-difference
+
+   ;; Triangulation — Earcut
+   #:earcut
+
+   ;; Triangulation — Constrained Delaunay
+   #:make-context
+   #:insert-point
+   #:insert-constraint
+   #:insert
+   #:remove-constraint
+   #:context-vertex-count
+   #:context-edge-count
+   #:context-triangle-count
+   #:get-triangles
+   #:locate-point
+   #:adjacent-triangles
+   #:constrained-p
+   #:constraint-ids))
