@@ -13,7 +13,7 @@
 NAME   – a symbol or string, used as the base filename.
 SUFFIX – optional string added before the extension (e.g. \"full\")."
   (let* ((base (asdf:system-relative-pathname
-                :common-shapes "test/test-outputs/"))
+                :common-shapes "test/"))
          (dir  (ensure-directories-exist base))
          (file (format nil "~(~A~)~@[-~A~].obj" name suffix)))
     (merge-pathnames file dir)))
@@ -204,6 +204,46 @@ plus any user-supplied extra variants."
                 (= 36 (triangle-count mesh))))
 
 ;;;; Entrypoint
+
+(def-suite* csg :in common-shapes-suite)
+
+(test csg-union-test
+  (let* ((a (make-cube 1.0))
+         (b (translate-mesh (make-cube 1.0) 0.5 0.0 0.0))
+         (result (csg-union a b)))
+    (is (check-mesh result))
+    (is (= 3 (mesh-dimensions result)))
+    (is (write-mesh-to-obj result (output-path 'csg-union)))))
+
+(test csg-intersection-test
+  (let* ((a (make-cube 1.0))
+         (b (translate-mesh (make-cube 1.0) 0.5 0.0 0.0))
+         (result (csg-intersection a b)))
+    (is (check-mesh result))
+    (is (= 3 (mesh-dimensions result)))
+    (is (write-mesh-to-obj result (output-path 'csg-intersection)))))
+
+(test csg-difference-test
+  (let* ((a (make-cube 1.0))
+         (b (translate-mesh (make-cube 1.0) 0.5 0.0 0.0))
+         (result (csg-difference a b)))
+    (is (check-mesh result))
+    (is (= 3 (mesh-dimensions result)))
+    (is (write-mesh-to-obj result (output-path 'csg-difference)))))
+
+(test csg-sphere-intersection
+  (let* ((a (make-sphere 1.0 16 12))
+         (b (translate-mesh (make-sphere 1.0 16 12) 0.5 0.0 0.0))
+         (result (csg-intersection a b)))
+    (is (check-mesh result))
+    (is (write-mesh-to-obj result (output-path 'csg-sphere-intersection)))))
+
+(test csg-cylinder-difference
+  (let* ((a (make-cube 2.0))
+         (b (make-cylinder 0.5 2.0 16 4))
+         (result (csg-difference a b)))
+    (is (check-mesh result))
+    (is (write-mesh-to-obj result (output-path 'csg-cylinder-difference)))))
 
 (defun run-tests ()
   (run! 'common-shapes-suite))

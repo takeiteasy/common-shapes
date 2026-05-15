@@ -7,7 +7,7 @@ A Common Lisp library for generating triangle meshes for 2D and 3D shapes.
 - **2D** - Rectangle, circle, ellipse, and polygons
 - **3D** - Cube, box, sphere, icosphere, cylinder, cone, torus, plane, hemisphere, capulse, platonic (4/8/12/20 polyhedrons)
 - **Utilities** 
-  - `compute-normals` - Ccompute per-vertex normals
+  - `compute-normals` - Compute per-vertex normals
   - `compute-aabb` - Calculate axis-aligned bounding box
   - `merge-meshes` - Combine multiple meshes
   - `flip-winding` - Reverse triangle winding order
@@ -18,10 +18,10 @@ A Common Lisp library for generating triangle meshes for 2D and 3D shapes.
   - `rotate-mesh-x/y/z` - Rotate around X, Y, or Z axis
   - `center-mesh` - Translate mesh to origin
   - `normalize-mesh` - Fit mesh in unit cube/square
-
-### TODOs
-
-- [ ] Constructive solid geometry
+- **CSG (Constructive Solid Geometry)**
+  - `csg-union` - Boolean union of two meshes
+  - `csg-intersection` - Boolean intersection of two meshes
+  - `csg-difference` - Boolean difference of two meshes
 
 ### Mesh Structure
 
@@ -182,6 +182,39 @@ All generators return a `mesh` structure containing:
           (triangle-count mesh)))
 ```
 
+### Constructive Solid Geometry
+
+```lisp
+;; Create a cube and a sphere, then combine them
+(let* ((cube (make-cube 1.0))
+       (sphere (make-sphere 0.8 16 12))
+       (moved (translate-mesh sphere 0.5 0.0 0.0)))
+  
+  ;; Union - merge two shapes together
+  (let ((result (csg-union cube moved)))
+    (format t "Union: ~D vertices, ~D triangles~%"
+            (vertex-count result)
+            (triangle-count result)))
+  
+  ;; Intersection - keep only overlapping volume
+  (let ((result (csg-intersection cube moved)))
+    (format t "Intersection: ~D vertices, ~D triangles~%"
+            (vertex-count result)
+            (triangle-count result)))
+  
+  ;; Difference - subtract one shape from another
+  (let ((result (csg-difference cube moved)))
+    (format t "Difference: ~D vertices, ~D triangles~%"
+            (vertex-count result)
+            (triangle-count result))))
+
+;; Drill a hole through a cube with a cylinder
+(let* ((cube (make-cube 2.0))
+       (drill (make-cylinder 0.5 3.0 16 4))
+       (result (csg-difference cube drill)))
+  (format t "Cube with hole: ~D triangles~%" (triangle-count result)))
+```
+
 ## Testing
 
 The library includes a comprehensive test suite using FiveAM:
@@ -195,4 +228,4 @@ This runs tests for all shape generators, platonic solids, and utility functions
 
 ## License
 
-[GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html)
+[GPLv3](LICENSE)

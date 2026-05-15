@@ -14,7 +14,8 @@
                (:file "generators-2d")
                (:file "generators-3d")
                (:file "platonic")
-               (:file "utilities")))
+               (:file "utilities")
+   (:file "csg")))
 
 (asdf:defsystem #:common-shapes/test
   :description "Tests for common-shapes"

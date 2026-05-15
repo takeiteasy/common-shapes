@@ -54,4 +54,9 @@
    #:rotate-mesh-y
    #:rotate-mesh-z
    #:center-mesh
-   #:normalize-mesh))
+    #:normalize-mesh
+
+   ;; CSG Operations
+   #:csg-union
+   #:csg-intersection
+   #:csg-difference))
