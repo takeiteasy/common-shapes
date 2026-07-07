@@ -8,16 +8,14 @@
   :version "0.1.0"
   :depends-on (#:3d-vectors #:3d-matrices)
   :serial t
-   :components ((:file "package")
-                (:file "types")
-                (:file "math")
-                (:file "generators-2d")
-                (:file "generators-3d")
-                (:file "platonic")
-                (:file "utilities")
-                (:file "csg")
-                (:file "earcut")
-                (:file "delaunay")))
+  :components ((:file "package")
+               (:file "types")
+               (:file "math")
+               (:file "generators-2d")
+               (:file "generators-3d")
+               (:file "platonic")
+               (:file "utilities")
+   (:file "csg")))
 
 (asdf:defsystem #:common-shapes/test
   :description "Tests for common-shapes"

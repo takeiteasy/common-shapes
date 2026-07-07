@@ -22,11 +22,6 @@ A Common Lisp library for generating triangle meshes for 2D and 3D shapes.
   - `csg-union` - Boolean union of two meshes
   - `csg-intersection` - Boolean intersection of two meshes
   - `csg-difference` - Boolean difference of two meshes
-- **Triangulation**
-  - `earcut` - Fast ear-clipping polygon triangulation (with hole support)
-  - `make-context` - Constrained Delaunay triangulation via quad-edge structure
-  - `insert-point` / `insert-constraint` / `insert` - Build triangulation incrementally
-  - `get-triangles` - Extract triangles from triangulation context
 
 ### Mesh Structure
 
@@ -219,67 +214,6 @@ All generators return a `mesh` structure containing:
        (result (csg-difference cube drill)))
   (format t "Cube with hole: ~D triangles~%" (triangle-count result)))
 ```
-
-### Triangulation
-
-Two 2D polygon triangulation methods are provided for converting polygons (with or without holes) into triangle meshes.
-
-#### Earcut (Fast)
-
-`earcut` implements the mapbox/earcut algorithm — a fast ear-clipping triangulation optimized for polygons with holes:
-
-```lisp
-;; Triangulate a simple polygon (square)
-(let* ((coords (make-array 8 :element-type 'single-float
-                           :initial-contents '(0.0 0.0  1.0 0.0  1.0 1.0  0.0 1.0)))
-       (indices (earcut coords)))
-  (format t "Triangles: ~D~%" (/ (length indices) 3)))
-
-;; Triangulate a polygon with a hole (donut shape)
-(let* ((coords (make-array 16 :element-type 'single-float
-                           :initial-contents '(0.0 0.0  2.0 0.0  2.0 2.0  0.0 2.0
-                                               0.5 0.5  0.5 1.5  1.5 1.5  1.5 0.5)))
-       (indices (earcut coords '(4))))  ; hole starts at vertex 4
-  (format t "Triangles: ~D~%" (/ (length indices) 3)))
-```
-
-#### Constrained Delaunay Triangulation (CDT)
-
-A quad-edge based constrained Delaunay triangulation for high-quality triangle meshes with constraint edges:
-
-```lisp
-;; Create a triangulation context
-(let* ((ctx (make-context :bounds '((-1.0 -1.0) (1.0 1.0))))
-       ;; Insert points
-       (v1 (insert-point ctx -0.5 -0.5))
-       (v2 (insert-point ctx  0.5 -0.5))
-       (v3 (insert-point ctx  0.5  0.5))
-       (v4 (insert-point ctx -0.5  0.5))
-       ;; Insert constraint edges to form a square
-       (insert-constraint ctx -0.5 -0.5  0.5 -0.5 :id 1)
-       (insert-constraint ctx  0.5 -0.5  0.5  0.5 :id 2)
-       (insert-constraint ctx  0.5  0.5 -0.5  0.5 :id 3)
-       (insert-constraint ctx -0.5  0.5 -0.5 -0.5 :id 4)
-       ;; Get triangles (excluding the super-triangle)
-       (triangles (get-triangles ctx :exclude-super-triangle t)))
-  (format t "Vertices: ~D, Edges: ~D, Triangles: ~D~%"
-          (context-vertex-count ctx)
-          (context-edge-count ctx)
-          (context-triangle-count ctx)))
-```
-
-Key functions:
-
-- **`make-context`** — Create a new triangulation context with `:super-triangle` or `:bounds`
-- **`insert-point`** — Insert a point, returns the vertex
-- **`insert-constraint`** — Insert a constrained edge with an ID for later removal
-- **`insert`** — Unified insert (points only or constrained edge)
-- **`remove-constraint`** — Remove a constraint by ID
-- **`get-triangles`** — Retrieve all triangles (optionally filter super-triangle)
-- **`locate-point`** — Find the triangle containing a point
-- **`adjacent-triangles`** — Get triangles adjacent to a given triangle
-- **`constrained-p`** — Check if an edge is constrained
-- **`constraint-ids`** — Get constraint IDs on an edge
 
 ## Testing
 
