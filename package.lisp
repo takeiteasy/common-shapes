@@ -3,9 +3,23 @@
 
 (defpackage #:common-shapes
   (:use #:cl)
-  (:local-nicknames (:v #:org.shirakumo.flare.vector)
-                    (:m #:org.shirakumo.flare.matrix))
+  (:local-nicknames (:v #:common-shapes.vec)
+                    (:m #:common-shapes.mat))
+  (:import-from #:common-shapes.vec #:vec2 #:vec3)
+  (:import-from #:common-shapes.mat
+                #:mtranslation #:mscaling #:mrotation #:m*
+                #:marr #:mat4-from-array #:*matrix-layout*)
   (:export
+   #:vec2
+   #:vec3
+   #:mtranslation
+   #:mscaling
+   #:mrotation
+   #:m*
+   #:marr
+   #:mat4-from-array
+   #:*matrix-layout*
+
    ;; Mesh structure and accessors
    #:mesh
    #:mesh-p

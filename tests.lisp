@@ -3,6 +3,8 @@
 
 (defpackage #:common-shapes/test
   (:use #:cl #:common-shapes #:fiveam)
+  (:local-nicknames (:v #:common-shapes.vec)
+                    (:m #:common-shapes.mat))
   (:export #:run-tests))
 (in-package #:common-shapes/test)
 
@@ -202,6 +204,104 @@ plus any user-supplied extra variants."
 (define-shape-test dodecahedron (make-dodecahedron 1.0)
   :base-checks ((= 108 (vertex-count mesh))
                 (= 36 (triangle-count mesh))))
+
+(def-suite* math-suite :in common-shapes-suite)
+
+(test vec-ops
+  (let ((u (common-shapes:vec3 1.0 0.0 0.0))
+        (w (common-shapes:vec3 0.0 1.0 0.0)))
+    ;; vunit: unit length, zero-vector guard
+    (let ((n (v:vunit (common-shapes:vec3 3.0 4.0 0.0))))
+      (is (< (abs (- 1.0 (sqrt (+ (* (v:vx3 n) (v:vx3 n))
+                                  (* (v:vy3 n) (v:vy3 n))
+                                  (* (v:vz3 n) (v:vz3 n))))))
+             1e-5)))
+    (let ((z (v:vunit (common-shapes:vec3 0.0 0.0 0.0))))
+      (is (= 0.0 (v:vx3 z) (v:vy3 z) (v:vz3 z))))
+    ;; vc: right-hand rule, x cross y = z
+    (let ((c (v:vc u w)))
+      (is (< (abs (- 1.0 (v:vz3 c))) 1e-5))
+      (is (< (abs (v:vx3 c)) 1e-5))
+      (is (< (abs (v:vy3 c)) 1e-5)))
+    ;; v+ / v- / v* componentwise
+    (let ((s (v:v+ u w)))
+      (is (= 1.0 (v:vx3 s))) (is (= 1.0 (v:vy3 s))) (is (= 0.0 (v:vz3 s))))
+    (let ((d (v:v- u w)))
+      (is (= 1.0 (v:vx3 d))) (is (= -1.0 (v:vy3 d))) (is (= 0.0 (v:vz3 d))))
+    (let ((m (v:v* u 2.0)))
+      (is (= 2.0 (v:vx3 m))) (is (= 0.0 (v:vy3 m))) (is (= 0.0 (v:vz3 m))))))
+
+(defun approx= (a b &optional (eps 1e-4))
+  (< (abs (- a b)) eps))
+
+(test mat-ops
+  (let ((p (common-shapes:vec3 1.0 0.0 0.0)))
+    ;; mtranslation
+    (let* ((tm (common-shapes:mtranslation (common-shapes:vec3 2.0 3.0 4.0)))
+           (tp (m:m* tm p)))
+      (is (approx= 3.0 (v:vx3 tp)))
+      (is (approx= 3.0 (v:vy3 tp)))
+      (is (approx= 4.0 (v:vz3 tp))))
+    ;; mscaling
+    (let* ((sm (m:mscaling (common-shapes:vec3 2.0 3.0 4.0)))
+           (sp (m:m* sm p)))
+      (is (approx= 2.0 (v:vx3 sp))))
+    ;; mrotation about Z by pi/2: (1,0,0) -> (0,1,0)
+    (let* ((rm (common-shapes:mrotation (common-shapes:vec3 0.0 0.0 1.0) (/ pi 2)))
+           (rp (m:m* rm p)))
+      (is (approx= 0.0 (v:vx3 rp)))
+      (is (approx= 1.0 (v:vy3 rp)))
+      (is (approx= 0.0 (v:vz3 rp))))
+    ;; minv: M^-1 * (M * p) = p, for rotation, translation, and scaling
+    (dolist (mtx (list (common-shapes:mrotation (common-shapes:vec3 0.0 1.0 0.0) 0.7)
+                        (common-shapes:mtranslation (common-shapes:vec3 2.0 -3.0 4.0))
+                        (common-shapes:mscaling (common-shapes:vec3 2.0 3.0 4.0))
+                        (m:m* (common-shapes:mtranslation (common-shapes:vec3 2.0 -3.0 4.0))
+                              (common-shapes:mrotation (common-shapes:vec3 0.0 1.0 0.0) 0.7))))
+      (let* ((im (m:minv mtx))
+             (mp (m:m* mtx p))
+             (back (m:m* im mp)))
+        (is (approx= (v:vx3 p) (v:vx3 back)))
+        (is (approx= (v:vy3 p) (v:vy3 back)))
+        (is (approx= (v:vz3 p) (v:vz3 back)))))
+    ;; mtranspose is an involution
+    (let* ((tm (common-shapes:mtranslation (common-shapes:vec3 2.0 3.0 4.0)))
+           (tt (m:mtranspose (m:mtranspose tm)))
+           (arr1 (m:marr tm))
+           (arr2 (m:marr tt)))
+      (is (every #'approx= arr1 arr2)))
+    ;; m* composition: (T * R) applied to p equals T applied to (R applied to p)
+    (let* ((tm (common-shapes:mtranslation (common-shapes:vec3 5.0 0.0 0.0)))
+           (rm (common-shapes:mrotation (common-shapes:vec3 0.0 0.0 1.0) (/ pi 2)))
+           (composed (m:m* tm rm))
+           (via-compose (m:m* composed p))
+           (via-steps (m:m* tm (m:m* rm p))))
+      (is (approx= (v:vx3 via-compose) (v:vx3 via-steps)))
+      (is (approx= (v:vy3 via-compose) (v:vy3 via-steps)))
+      (is (approx= (v:vz3 via-compose) (v:vz3 via-steps))))))
+
+(test mat-layout
+  (let ((tm (common-shapes:mtranslation (common-shapes:vec3 1.0 2.0 3.0))))
+    (let ((col (m:marr tm :column-major))
+          (row (m:marr tm :row-major)))
+      ;; column-major: translation at indices 12/13/14
+      (is (approx= 1.0 (aref col 12)))
+      (is (approx= 2.0 (aref col 13)))
+      (is (approx= 3.0 (aref col 14)))
+      ;; row-major: translation at indices 3/7/11 (the transpose)
+      (is (approx= 1.0 (aref row 3)))
+      (is (approx= 2.0 (aref row 7)))
+      (is (approx= 3.0 (aref row 11)))
+      ;; the two layouts are element-wise transposes of one another
+      (dotimes (r 4)
+        (dotimes (c 4)
+          (is (approx= (aref col (+ (* c 4) r)) (aref row (+ (* r 4) c))))))
+      ;; round-trip: mat4-from-array of (marr m layout) in the same layout
+      ;; reconstructs the original matrix, for both layouts
+      (let ((rt-col (m:mat4-from-array col :column-major))
+            (rt-row (m:mat4-from-array row :row-major)))
+        (is (every #'approx= col (m:marr rt-col :column-major)))
+        (is (every #'approx= row (m:marr rt-row :row-major)))))))
 
 ;;;; Entrypoint
 

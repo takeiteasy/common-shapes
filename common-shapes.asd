@@ -6,9 +6,10 @@
   :author "George Watson <gigolo@hotmail.co.uk>"
   :license "MIT"
   :version "0.1.0"
-  :depends-on (#:3d-vectors #:3d-matrices)
   :serial t
-  :components ((:file "package")
+  :components ((:file "vectors")
+               (:file "matrices")
+               (:file "package")
                (:file "types")
                (:file "math")
                (:file "generators-2d")

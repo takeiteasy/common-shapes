@@ -35,8 +35,23 @@ All generators return a `mesh` structure containing:
 
 ## Dependencies
 
-- `3d-vectors` - Vector operations
-- `3d-matrices` - Matrix operations
+`common-shapes` has no runtime dependencies — vector and matrix math are
+provided in-house. `fiveam` is required only to run the test suite.
+
+### Matrix layout
+
+Internally, matrices are always column-major with column-vector math
+(`M*v`). The special variable `*matrix-layout*` (default `:column-major`)
+controls only the flat 16-float array format used by `marr` (serializing a
+matrix out) and `mat4-from-array` (reading a matrix in):
+
+- `:column-major` — matches OpenGL / column-vector conventions (default).
+- `:row-major` — matches WebGPU/WGSL / row-vector conventions.
+
+The two layouts are transposes of each other and are geometrically
+identical when paired with the matching vector convention in your shader.
+Set it once for your target pipeline, e.g.
+`(setf common-shapes:*matrix-layout* :row-major)`.
 
 ## Examples
 
@@ -118,8 +133,8 @@ All generators return a `mesh` structure containing:
 
 ;; Apply arbitrary transformation matrix
 (let* ((mesh (make-sphere 1.0 16 8))
-       (matrix (m:m* (m:mtranslation (v:vec3 1.0 2.0 3.0))
-                     (m:mrotation (v:vec3 0.0 1.0 0.0) (/ pi 2))))
+       (matrix (common-shapes:m* (common-shapes:mtranslation (common-shapes:vec3 1.0 2.0 3.0))
+                                 (common-shapes:mrotation (common-shapes:vec3 0.0 1.0 0.0) (/ pi 2))))
        (transformed (transform-mesh mesh matrix)))
   ;; Use transformed mesh...
   )

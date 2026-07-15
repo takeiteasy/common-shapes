@@ -1,5 +1,5 @@
 ;;;; math.lisp
-;;;; Math utilities for common-shapes using 3d-vectors and 3d-matrices
+;;;; Math utilities for common-shapes using the in-house vec/mat modules
 
 (in-package #:common-shapes)
 
@@ -24,7 +24,7 @@
         (values 0.0 0.0 0.0)
         (values (/ x len) (/ y len) (/ z len)))))
 
-;;; Triangle Operations using 3d-vectors
+;;; Triangle Operations
 
 (defun triangle-normal (v0 v1 v2)
   "Compute the normal of a triangle defined by three vec3 vertices.
@@ -93,7 +93,7 @@
     (setf (aref tex-coords base) (v:vx2 vec)
           (aref tex-coords (1+ base)) (v:vy2 vec))))
 
-;;; Matrix utilities using 3d-matrices
+;;; Matrix utilities
 
 (defun transform-mesh-vertices (vertices matrix &key (dimensions 3))
   "Transform all vertices in array by matrix. Returns new array."
