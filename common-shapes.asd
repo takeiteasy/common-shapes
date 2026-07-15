@@ -4,7 +4,7 @@
 (asdf:defsystem #:common-shapes
   :description "A Common Lisp library for generating triangle meshes for 2D and 3D shapes"
   :author "George Watson <gigolo@hotmail.co.uk>"
-  :license "GPLv3"
+  :license "MIT"
   :version "0.1.0"
   :depends-on (#:3d-vectors #:3d-matrices)
   :serial t
@@ -20,7 +20,7 @@
 (asdf:defsystem #:common-shapes/test
   :description "Tests for common-shapes"
   :author "George Watson <gigolo@hotmail.co.uk>"
-  :license "GPLv3"
+  :license "MIT"
   :depends-on (#:common-shapes #:fiveam)
   :serial t
   :components ((:file "tests")))
