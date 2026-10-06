@@ -2,6 +2,21 @@
 
 A Common Lisp library for generating and manipulating triangle meshes for 2D and 3D shapes. 
 
+## Installation
+
+From the takeiteasy Quicklisp dist:
+
+```lisp
+(ql-dist:install-dist "https://takeiteasy.github.io/ql-dist/dist/takeiteasy.txt")
+(ql:quickload :common-shapes)
+```
+
+Or clone into Quicklisp's local-projects:
+
+```sh
+git clone https://github.com/takeiteasy/common-shapes ~/quicklisp/local-projects/common-shapes
+```
+
 ## Features
 
 - **2D** - Rectangle, circle, ellipse, and polygons
