@@ -1,7 +1,7 @@
 ;;;; types.lisp
-;;;; Mesh data structure definitions for common-shapes
+;;;; Mesh data structure definitions for cl-meshgen
 
-(in-package #:common-shapes)
+(in-package #:cl-meshgen)
 
 (defstruct mesh
   "A triangle mesh with vertices, indices, and optional normals and texture coordinates.

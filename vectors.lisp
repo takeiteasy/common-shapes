@@ -1,13 +1,13 @@
 ;;;; vectors.lisp
 ;;;; Minimal single-float vec2/vec3 module (replaces 3d-vectors)
 
-(defpackage #:common-shapes.vec
+(defpackage #:cl-meshgen.vec
   (:use #:cl)
   (:export #:vec2 #:vec2-p #:vx2 #:vy2
            #:vec3 #:vec3-p #:vx3 #:vy3 #:vz3
            #:v+ #:v- #:v* #:vc #:vunit))
 
-(in-package #:common-shapes.vec)
+(in-package #:cl-meshgen.vec)
 
 (declaim (inline sf))
 (defun sf (x)

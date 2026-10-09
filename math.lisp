@@ -1,7 +1,7 @@
 ;;;; math.lisp
-;;;; Math utilities for common-shapes using the in-house vec/mat modules
+;;;; Math utilities for cl-meshgen using the in-house vec/mat modules
 
-(in-package #:common-shapes)
+(in-package #:cl-meshgen)
 
 ;;; Constants
 (defconstant +pi+ (coerce pi 'single-float)

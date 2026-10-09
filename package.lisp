@@ -1,12 +1,12 @@
 ;;;; package.lisp
-;;;; Package definition for common-shapes
+;;;; Package definition for cl-meshgen
 
-(defpackage #:common-shapes
+(defpackage #:cl-meshgen
   (:use #:cl)
-  (:local-nicknames (:v #:common-shapes.vec)
-                    (:m #:common-shapes.mat))
-  (:import-from #:common-shapes.vec #:vec2 #:vec3)
-  (:import-from #:common-shapes.mat
+  (:local-nicknames (:v #:cl-meshgen.vec)
+                    (:m #:cl-meshgen.mat))
+  (:import-from #:cl-meshgen.vec #:vec2 #:vec3)
+  (:import-from #:cl-meshgen.mat
                 #:mtranslation #:mscaling #:mrotation #:m*
                 #:marr #:mat4-from-array #:*matrix-layout*)
   (:export

@@ -7,14 +7,14 @@
 ;;;; row-major pipeline (e.g. WebGPU/WGSL) can emit/read the transposed
 ;;;; layout without any change to the internal math.
 
-(defpackage #:common-shapes.mat
-  (:use #:cl #:common-shapes.vec)
+(defpackage #:cl-meshgen.mat
+  (:use #:cl #:cl-meshgen.vec)
   (:export #:mat4 #:mat4-p
            #:mtranslation #:mscaling #:mrotation
            #:m* #:mtranspose #:minv
            #:*matrix-layout* #:marr #:mat4-from-array))
 
-(in-package #:common-shapes.mat)
+(in-package #:cl-meshgen.mat)
 
 (declaim (inline sf))
 (defun sf (x)

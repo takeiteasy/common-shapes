@@ -1,4 +1,4 @@
-# common-shapes
+# cl-meshgen
 
 A Common Lisp library for generating and manipulating triangle meshes for 2D and 3D shapes. 
 
@@ -8,13 +8,13 @@ From the takeiteasy Quicklisp dist, which is served over HTTPS so Quicklisp need
 
 ```lisp
 (ql-dist:install-dist "https://takeiteasy.github.io/ql-dist/dist/takeiteasy.txt")
-(ql:quickload :common-shapes)
+(ql:quickload :cl-meshgen)
 ```
 
 Or clone into Quicklisp's local-projects:
 
 ```sh
-git clone https://github.com/takeiteasy/common-shapes ~/quicklisp/local-projects/common-shapes
+git clone https://github.com/takeiteasy/cl-meshgen ~/quicklisp/local-projects/cl-meshgen
 ```
 
 ## Features
@@ -50,7 +50,7 @@ All generators return a `mesh` structure containing:
 
 ## Dependencies
 
-`common-shapes` has no runtime dependencies — vector and matrix math are
+`cl-meshgen` has no runtime dependencies — vector and matrix math are
 provided in-house. `fiveam` is required only to run the test suite.
 
 ### Matrix layout
@@ -66,15 +66,15 @@ matrix out) and `mat4-from-array` (reading a matrix in):
 The two layouts are transposes of each other and are geometrically
 identical when paired with the matching vector convention in your shader.
 Set it once for your target pipeline, e.g.
-`(setf common-shapes:*matrix-layout* :row-major)`.
+`(setf cl-meshgen:*matrix-layout* :row-major)`.
 
 ## Examples
 
 ### Basic 2D Shapes
 
 ```lisp
-(ql:quickload :common-shapes)
-(use-package :common-shapes)
+(ql:quickload :cl-meshgen)
+(use-package :cl-meshgen)
 
 ;; Create a 2D rectangle
 (let ((rect (make-rectangle-2d 2.0 1.0)))
@@ -148,8 +148,8 @@ Set it once for your target pipeline, e.g.
 
 ;; Apply arbitrary transformation matrix
 (let* ((mesh (make-sphere 1.0 16 8))
-       (matrix (common-shapes:m* (common-shapes:mtranslation (common-shapes:vec3 1.0 2.0 3.0))
-                                 (common-shapes:mrotation (common-shapes:vec3 0.0 1.0 0.0) (/ pi 2))))
+       (matrix (cl-meshgen:m* (cl-meshgen:mtranslation (cl-meshgen:vec3 1.0 2.0 3.0))
+                                 (cl-meshgen:mrotation (cl-meshgen:vec3 0.0 1.0 0.0) (/ pi 2))))
        (transformed (transform-mesh mesh matrix)))
   ;; Use transformed mesh...
   )
@@ -250,8 +250,8 @@ Set it once for your target pipeline, e.g.
 The library includes a comprehensive test suite using FiveAM:
 
 ```lisp
-(ql:quickload :common-shapes/test)
-(common-shapes/test:run-tests)
+(ql:quickload :cl-meshgen/test)
+(cl-meshgen/test:run-tests)
 ```
 
 This runs tests for all shape generators, platonic solids, and utility functions.
@@ -259,7 +259,7 @@ This runs tests for all shape generators, platonic solids, and utility functions
 ## License
 
 ```text
-common-shapes
+cl-meshgen
 
 Copyright (C) 2025 George Watson
 

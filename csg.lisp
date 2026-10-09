@@ -1,7 +1,7 @@
 ;;;; csg.lisp
 ;;;; Constructive Solid Geometry - BSP-tree based boolean operations
 
-(in-package #:common-shapes)
+(in-package #:cl-meshgen)
 
 ;; ---------- Internal polygon representation ----------
 

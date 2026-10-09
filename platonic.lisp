@@ -1,7 +1,7 @@
 ;;;; platonic.lisp
-;;;; Platonic solid generators for common-shapes
+;;;; Platonic solid generators for cl-meshgen
 
-(in-package #:common-shapes)
+(in-package #:cl-meshgen)
 
 ;;; Golden ratio for icosahedron and dodecahedron
 (defconstant +phi+ (/ (+ 1.0 (sqrt 5.0)) 2.0)

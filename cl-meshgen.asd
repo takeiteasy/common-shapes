@@ -1,7 +1,7 @@
-;;;; common-shapes.asd
-;;;; System definition for common-shapes
+;;;; cl-meshgen.asd
+;;;; System definition for cl-meshgen
 
-(asdf:defsystem #:common-shapes
+(asdf:defsystem #:cl-meshgen
   :description "A Common Lisp library for generating triangle meshes for 2D and 3D shapes"
   :author "George Watson <gigolo@hotmail.co.uk>"
   :license "GPLv3"
@@ -18,10 +18,10 @@
                (:file "utilities")
    (:file "csg")))
 
-(asdf:defsystem #:common-shapes/test
-  :description "Tests for common-shapes"
+(asdf:defsystem #:cl-meshgen/test
+  :description "Tests for cl-meshgen"
   :author "George Watson <gigolo@hotmail.co.uk>"
   :license "GPLv3"
-  :depends-on (#:common-shapes #:fiveam)
+  :depends-on (#:cl-meshgen #:fiveam)
   :serial t
   :components ((:file "tests")))

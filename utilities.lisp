@@ -1,7 +1,7 @@
 ;;;; utilities.lisp
-;;;; Mesh utility functions for common-shapes
+;;;; Mesh utility functions for cl-meshgen
 
-(in-package #:common-shapes)
+(in-package #:cl-meshgen)
 
 (defun compute-normals (mesh)
   "Compute per-vertex normals for a mesh by averaging adjacent face normals.

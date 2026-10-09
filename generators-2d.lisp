@@ -1,7 +1,7 @@
 ;;;; generators-2d.lisp
-;;;; 2D shape generators for common-shapes
+;;;; 2D shape generators for cl-meshgen
 
-(in-package #:common-shapes)
+(in-package #:cl-meshgen)
 
 (defun make-polygon-2d (n-sides radius &key 3d normals tex-coords)
   "Generate a regular polygon mesh with N-SIDES sides and given RADIUS.

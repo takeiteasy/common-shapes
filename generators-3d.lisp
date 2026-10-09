@@ -1,7 +1,7 @@
 ;;;; generators-3d.lisp
-;;;; 3D shape generators for common-shapes
+;;;; 3D shape generators for cl-meshgen
 
-(in-package #:common-shapes)
+(in-package #:cl-meshgen)
 
 (defun make-plane (width height slices stacks &key normals tex-coords)
   "Generate a flat plane mesh on the XY plane centered at origin.
