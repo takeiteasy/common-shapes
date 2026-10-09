@@ -5,7 +5,7 @@
   :description "A Common Lisp library for generating triangle meshes for 2D and 3D shapes"
   :author "George Watson <gigolo@hotmail.co.uk>"
   :license "GPLv3"
-  :version "0.1.0"
+  :version "0.1.1"
   :serial t
   :components ((:file "vectors")
                (:file "matrices")
